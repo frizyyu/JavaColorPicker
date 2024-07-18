@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.converter.colorconverter.HelloController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <children>
+      <AnchorPane prefHeight="675.0" prefWidth="320.0">
+         <children>
+            <Label layoutX="41.0" layoutY="429.0" prefHeight="41.0" prefWidth="45.0" text="RGB:" />
+            <Label layoutX="41.0" layoutY="470.0" prefHeight="41.0" prefWidth="45.0" text="RGBA:" />
+            <Label layoutX="41.0" layoutY="511.0" prefHeight="41.0" prefWidth="45.0" text="HEX:" />
+            <Label layoutX="41.0" layoutY="552.0" prefHeight="41.0" prefWidth="45.0" text="HSLA:" />
+            <Label layoutX="41.0" layoutY="593.0" prefHeight="41.0" prefWidth="45.0" text="CMYK:" />
+            <TextField fx:id="rgbText" layoutX="86.0" layoutY="437.0" prefHeight="25.0" prefWidth="171.0" text="rgb(0, 0, 0);" />
+            <TextField fx:id="tgbaText" layoutX="86.0" layoutY="478.0" prefHeight="25.0" prefWidth="171.0" text="rgba(0, 0, 0, 0)" />
+            <TextField fx:id="hexText" layoutX="86.0" layoutY="519.0" prefHeight="25.0" prefWidth="171.0" text="#0000" />
+            <TextField fx:id="hslaText" layoutX="86.0" layoutY="560.0" prefHeight="25.0" prefWidth="171.0" text="0" />
+            <TextField fx:id="cmykText" layoutX="86.0" layoutY="601.0" prefHeight="25.0" prefWidth="171.0" text="0" />
+            <Label layoutX="100.0" layoutY="30.0" prefHeight="56.0" prefWidth="143.0" text="Color converter by frizyyu" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
