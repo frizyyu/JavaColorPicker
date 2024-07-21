@@ -15,7 +15,7 @@ public class ColorConverterApp extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 320, 675);
         ColorConverterView cvc = fxmlLoader.getController();
         cvc.onStart();
-        stage.setTitle("Color converter!");
+        stage.setTitle("Color converter");
         stage.setScene(scene);
         stage.show();
     }

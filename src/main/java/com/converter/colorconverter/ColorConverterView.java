@@ -7,17 +7,14 @@ import static com.converter.colorconverter.logic.ColorConvertEnum.*;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.awt.*;
 import java.util.LinkedHashMap;
-import java.util.Objects;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
@@ -54,7 +51,6 @@ public class ColorConverterView {
     private int currAlpha = 255;
     private Color currColor = new Color(255, 255, 255);
     private Robot robot;
-    private KeyCodeCombination pastKeyCombination;
     private javafx.scene.paint.Color selectedColor = javafx.scene.paint.Color.RED;
 
     protected void onStart() throws AWTException {
@@ -65,12 +61,15 @@ public class ColorConverterView {
     private void setHandlers() throws AWTException {
 
         //------handler for catch ctrl v press and paste image in imageView------//
-        pastKeyCombination = new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-            if(!pastKeyCombination.match(keyEvent)) { //изменить, чтобы работало только для ctrl+v и при этом не менялось значение в полях для цветов
+            if(keyEvent.isControlDown() && keyEvent.getCode() == KeyCode.V) {
                 pasteImageFromClipBoard();
             }
+            else if(keyEvent.getCode() == KeyCode.ESCAPE) //event for setting focus on scene to correct work ctrl+v press
+                scene.requestFocus();
         });
+
+        scene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> scene.requestFocus()); //event for setting focus on scene to correct work ctrl+v press
 
         //------handler for set ImageGetColor, when mouse clicked on imageView and get the color------//
         robot = new Robot();
@@ -102,6 +101,8 @@ public class ColorConverterView {
 
     //------------handlers------------//
 
+
+    //---alpha handlers---//
     private void startAlphaChange(MouseEvent event){
         if (event.isPrimaryButtonDown()) {
             circle1.setVisible(false);
@@ -121,7 +122,9 @@ public class ColorConverterView {
     private void stopAlphaChange(MouseEvent event){
         isAlphaChanging = false;
     }
+    //------//
 
+    //---color change handlers---//
     private void startColorChange(MouseEvent event){
         if (event.isPrimaryButtonDown()) {
             circle1.setVisible(false);
@@ -143,7 +146,9 @@ public class ColorConverterView {
     private void stopColorChange(MouseEvent event){
         isColorChanging = false;
     }
+    //------//
 
+    //---color choose handlers---//
     private void startColorChoose(MouseEvent event){
         if (event.isPrimaryButtonDown()) {
             circle1.setVisible(false);
@@ -162,7 +167,9 @@ public class ColorConverterView {
     private void stopColorChoose(MouseEvent event){
         isColorChoosing = false;
     }
+    //------//
 
+    //---image handlers---//
     private void startImageGetColor(MouseEvent event){
         if (event.isPrimaryButtonDown()) {
             circle1.setVisible(true);
@@ -180,8 +187,10 @@ public class ColorConverterView {
     private void stopImageGetColor(MouseEvent event){
         isStartImageGetColoring = false;
     }
+    //------//
     //------------------------------------//
 
+    //---voids for moving circles and rectangles for choosing colors---//
     private void rectMoving(MouseEvent e){
         if (e.getSource() == hueStrip) {
             double centerY = e.getY() - 19; //почему
@@ -220,6 +229,8 @@ public class ColorConverterView {
             circle1.setCenterY(centerY);
         }
     }
+    //------//
+
     private void getColor(){ //void for get color and call update fields
         String selectedColorAsString = getColorFromPalette(paletteX, paletteY);
         currColor = new Color(Integer.valueOf(selectedColorAsString.substring(0, 2), 16), Integer.valueOf(selectedColorAsString.substring(2, 4), 16), Integer.valueOf(selectedColorAsString.substring(4, 6), 16), currAlpha);
@@ -277,6 +288,7 @@ public class ColorConverterView {
 
     @FXML
     protected void setStartValues(){
+        scene.requestFocus();
         circle1.setVisible(false);
         circle1.setMouseTransparent(true);
 
