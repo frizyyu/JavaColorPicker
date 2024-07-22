@@ -9,4 +9,6 @@ module com.converter.colorconverter {
     exports com.converter.colorconverter;
     exports com.converter.colorconverter.logic;
     opens com.converter.colorconverter.logic to javafx.fxml;
+    exports com.converter.colorconverter.language;
+    opens com.converter.colorconverter.language to javafx.fxml;
 }

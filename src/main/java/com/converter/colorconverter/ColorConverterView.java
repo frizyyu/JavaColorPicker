@@ -2,7 +2,7 @@ package com.converter.colorconverter;
 
 import com.converter.colorconverter.logic.ColorConvert;
 import com.converter.colorconverter.logic.ColorConvertEnum;
-import javafx.beans.binding.StringBinding;
+import com.converter.colorconverter.language.Language;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -24,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
@@ -51,6 +52,7 @@ public class ColorConverterView {
     public Rectangle resultColor;
     public Label titleLabel;
     public Button exitButton;
+    public Button helpButton;
 
     private ObjectProperty<ResourceBundle> resources;
     Language language;
@@ -427,19 +429,6 @@ public class ColorConverterView {
         resultColor.setFill(new javafx.scene.paint.Color(color.getRed()/255.0, color.getGreen()/255.0, color.getBlue()/255.0, currAlpha / 255.0));
     }
 
-    public StringBinding getStringBinding(String key) {
-        return new StringBinding() {
-            {
-                bind(resources);
-            }
-
-            @Override
-            public String computeValue() {
-                return resources.get().getString(key);
-            }
-        };
-    }
-
     private void initLang() throws IOException {
         localeMap = new HashMap<>();
         localeMap.put("English", new Locale("en", "UA"));
@@ -452,12 +441,19 @@ public class ColorConverterView {
         languageComboBox.getSelectionModel().select(langList[2]);
         resources.set(ResourceBundle.getBundle
                 ("bundles.gui", new Locale(langList[0], langList[1])));
-        noImageLabel.textProperty().bind(getStringBinding("noImage"));
-        titleLabel.textProperty().bind(getStringBinding("title"));
+        noImageLabel.textProperty().bind(language.getStringBinding("noImage"));
+        titleLabel.textProperty().bind(language.getStringBinding("title"));
+        exitButton.textProperty().bind(language.getStringBinding("exit"));
+        helpButton.textProperty().bind(language.getStringBinding("help"));
     }
     @FXML
     protected void exit(){
         System.exit(0);
+    }
+    @FXML
+    protected void help() throws Exception {
+        HelpWindowApp hwa = new HelpWindowApp();
+        hwa.start(new Stage());
     }
     @FXML
     protected void changeLang() throws IOException {
