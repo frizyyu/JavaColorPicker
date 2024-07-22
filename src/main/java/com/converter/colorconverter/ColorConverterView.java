@@ -2,9 +2,15 @@ package com.converter.colorconverter;
 
 import com.converter.colorconverter.logic.ColorConvert;
 import com.converter.colorconverter.logic.ColorConvertEnum;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -20,7 +26,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import java.awt.*;
-import java.util.LinkedHashMap;
+import java.io.IOException;
+import java.util.*;
 
 import static com.converter.colorconverter.logic.ColorConvertEnum.*;
 
@@ -31,6 +38,7 @@ public class ColorConverterView {
     public TextField hslaText;
     public TextField cmykText;
     public AnchorPane scene;
+    public ComboBox languageComboBox;
     public ImageView image;
     public Circle circle; //for colorPalette
     public Label noImageLabel;
@@ -41,7 +49,11 @@ public class ColorConverterView {
     public Canvas alphaStrip;
     public Rectangle alphaRect;
     public Rectangle resultColor;
+    public Label titleLabel;
+    public Button exitButton;
 
+    private ObjectProperty<ResourceBundle> resources;
+    Language language;
     private double paletteX = 0.0;
     private double paletteY = 0.0;
     private double MAXPALETTEX = 200.0;
@@ -58,8 +70,9 @@ public class ColorConverterView {
     private final double MINRECTX = -173.0;
     private int currAlpha = 255;
     private javafx.scene.paint.Color selectedColor = javafx.scene.paint.Color.WHITE;
+    private Map<String, Locale> localeMap;
 
-    protected void onStart() {
+    protected void onStart() throws IOException {
         setHandlers();
         setStartValues();
     }
@@ -104,29 +117,59 @@ public class ColorConverterView {
         //------handlers for change color when fields were changed------//
         rgbText.textProperty().addListener((observableValue, s, t1) -> {
             if (rgbText.isFocused()) {
-                updateColorStripesAndPalette(ColorConvert.convertToRGBA(rgbText.getText().split(", "), RGB));
+                try {
+                    rgbText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+                    updateColorStripesAndPalette(ColorConvert.convertToRGBA(rgbText.getText().split(", "), RGB));
+                } catch (ArrayIndexOutOfBoundsException | NumberFormatException e){
+                    rgbText.setStyle("-fx-border-color: #FF0000FF; -fx-background-color: #ff000064");
+                }
             }
         });
         rgbaText.textProperty().addListener((observableValue, s, t1) -> {
-            if (rgbaText.isFocused()) {
-                updateColorStripesAndPalette(ColorConvert.convertToRGBA(rgbaText.getText().split(", "), RGBA));
+            try {
+                if (rgbaText.isFocused()) {
+                    rgbaText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+                    updateColorStripesAndPalette(ColorConvert.convertToRGBA(rgbaText.getText().split(", "), RGBA));
+                }
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e){
+                rgbaText.setStyle("-fx-border-color: #FF0000FF; -fx-background-color: #ff000064");
             }
         });
         hexText.textProperty().addListener((observableValue, s, t1) -> {
-            if (hexText.isFocused() && hexText.getLength() == 9) {
-                updateColorStripesAndPalette(ColorConvert.convertToRGBA(new String[]{hexText.getText(), String.valueOf(currAlpha)}, HEX));
+            try {
+                if (hexText.isFocused()) {
+                    hexText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+                    if (hexText.getLength() == 9)
+                        updateColorStripesAndPalette(ColorConvert.convertToRGBA(new String[]{hexText.getText()}, HEX));
+                    else
+                        hexText.setStyle("-fx-border-color: #FF0000FF; -fx-background-color: #ff000064");
+                }
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e){
+                hexText.setStyle("-fx-border-color: #FF0000FF; -fx-background-color: #ff000064");
             }
         });
         hslaText.textProperty().addListener((observableValue, s, t1) -> {
-            String hslaTextS = hslaText.getText();
-            if (hslaText.isFocused() && !hslaTextS.endsWith(".")) {
-                updateColorStripesAndPalette(ColorConvert.convertToRGBA(hslaTextS.replace("%", "").split(", "), HSLA));
+            try {
+                String hslaTextS = hslaText.getText();
+                if (hslaText.isFocused()) {
+                    hslaText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+                    if (!hslaTextS.endsWith("."))
+                        updateColorStripesAndPalette(ColorConvert.convertToRGBA(hslaTextS.replace("%", "").split(", "), HSLA));
+                }
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e){
+                hslaText.setStyle("-fx-border-color: #FF0000FF; -fx-background-color: #ff000064");
             }
         });
         cmykText.textProperty().addListener((observableValue, s, t1) -> {
-            if (cmykText.isFocused()) {
-                String[] inp = cmykText.getText().split(", ");
-                updateColorStripesAndPalette(ColorConvert.convertToRGBA(new String[]{inp[0], inp[1], inp[2], inp[3], String.valueOf(currAlpha)}, CMYK));
+            try {
+                if (cmykText.isFocused()) {
+                    System.out.println(cmykText.getText());
+                    cmykText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+                    String[] inp = cmykText.getText().split(", ");
+                    updateColorStripesAndPalette(ColorConvert.convertToRGBA(new String[]{inp[0], inp[1], inp[2], inp[3], String.valueOf(currAlpha)}, CMYK));
+                }
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException e){
+                cmykText.setStyle("-fx-border-color: #FF0000FF; -fx-background-color: #FF000063");
             }
         });
 
@@ -150,7 +193,7 @@ public class ColorConverterView {
             double y = event.getY();
             char[] chArr = String.format("%s", 1  - (y / alphaStrip.getHeight()) + 0.0000000001f).toCharArray();
             currAlpha = (int) (255 * Double.parseDouble(String.format("%c%c%c%c", chArr[0], chArr[1], chArr[2], chArr[3])));
-            changeColorFields(new Color((int) selectedColor.getRed() * 255, (int) (selectedColor.getGreen() * 255), (int) (selectedColor.getBlue() * 255), currAlpha));
+            changeColorFields(new Color((int) (selectedColor.getRed() * 255), (int) (selectedColor.getGreen() * 255), (int) (selectedColor.getBlue() * 255), currAlpha));
         }
     }
     private void stopAlphaChange(MouseEvent event){
@@ -368,6 +411,13 @@ public class ColorConverterView {
     }
 
     private void changeColorFields(Color color){
+        rgbText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+        rgbaText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+        hexText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+        hslaText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+        cmykText.setStyle("-fx-border-color: #bebebeff; -fx-background-color: #ffffff");
+
+        currAlpha = color.getAlpha();
         LinkedHashMap<ColorConvertEnum, String> colors = ColorConvert.convert(new Color(color.getRed(), color.getGreen(), color.getBlue(), currAlpha));
         rgbText.setText(colors.get(RGB));
         rgbaText.setText(colors.get(RGBA));
@@ -377,8 +427,49 @@ public class ColorConverterView {
         resultColor.setFill(new javafx.scene.paint.Color(color.getRed()/255.0, color.getGreen()/255.0, color.getBlue()/255.0, currAlpha / 255.0));
     }
 
+    public StringBinding getStringBinding(String key) {
+        return new StringBinding() {
+            {
+                bind(resources);
+            }
+
+            @Override
+            public String computeValue() {
+                return resources.get().getString(key);
+            }
+        };
+    }
+
+    private void initLang() throws IOException {
+        localeMap = new HashMap<>();
+        localeMap.put("English", new Locale("en", "UA"));
+        localeMap.put("Русский", new Locale("ru", "RU"));
+        languageComboBox.setItems(FXCollections.observableArrayList(localeMap.keySet()));
+        language = new Language();
+        resources = language.getResources();
+
+        String[] langList = language.readLangFromFile();
+        languageComboBox.getSelectionModel().select(langList[2]);
+        resources.set(ResourceBundle.getBundle
+                ("bundles.gui", new Locale(langList[0], langList[1])));
+        noImageLabel.textProperty().bind(getStringBinding("noImage"));
+        titleLabel.textProperty().bind(getStringBinding("title"));
+    }
     @FXML
-    protected void setStartValues(){
+    protected void exit(){
+        System.exit(0);
+    }
+    @FXML
+    protected void changeLang() throws IOException {
+        resources.set(ResourceBundle.getBundle
+                ("bundles.gui", localeMap.get(languageComboBox.getSelectionModel().getSelectedItem())));
+        language.setResources(resources);
+        language.saveLanguage(String.format("%s_%s", localeMap.get(languageComboBox.getSelectionModel().getSelectedItem()), languageComboBox.getSelectionModel().getSelectedItem()));
+    }
+    @FXML
+    protected void setStartValues() throws IOException {
+        initLang();
+
         scene.requestFocus();
         circle1.setVisible(false);
         circle1.setMouseTransparent(true);
@@ -404,7 +495,7 @@ public class ColorConverterView {
 
         //set view for alpha strip//
         updateAlphaStrip();
-
+        noImageLabel.setAlignment(Pos.CENTER);
         updateColorPalette();
         changeColorFields(new Color((int) (selectedColor.getRed() * 255), (int) (selectedColor.getGreen() * 255), (int) (selectedColor.getBlue() * 255), (int) selectedColor.getOpacity() * 255));
     }
