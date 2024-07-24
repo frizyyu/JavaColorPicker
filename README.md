@@ -16,6 +16,12 @@
   
 - Russian
 <br>
+<h3>You can:</h3>
+
+- download <a href="https://github.com/frizyyu/JavaColorPicker/tree/master">source files</a>
+
+- download <a href="https://github.com/frizyyu/JavaColorPicker/tree/quick-start">.rar file</a> for a quick start
+
 <h3>Some screenshots:</h3><br>
 
 ![image](https://github.com/user-attachments/assets/c403a774-088d-4354-8d8b-0ab3e144b4f7)
