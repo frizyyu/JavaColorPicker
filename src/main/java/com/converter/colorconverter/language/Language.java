@@ -4,7 +4,6 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
