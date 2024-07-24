@@ -4,6 +4,7 @@ import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -22,22 +23,33 @@ public class Language {
         this.resources = resources;
     }
     public String[] readLangFromFile() throws IOException {
-        String file ="src/main/resources/bundles/lang";
-
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String lang = reader.readLine();
-        reader.close();
+        String userDir = System.getProperty("user.dir");
+        BufferedReader br;
+        try {
+            File file = new File(userDir, "/colorConverterLangs/bundles/lang");
+            br = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException e){
+            File dir = new File(userDir, "/colorConverterLangs/bundles");
+            File file = new File(dir, "lang");
+            dir.mkdirs();
+            file.createNewFile();
+            saveLanguage("null");
+            br = new BufferedReader(new FileReader(file));
+        }
+        String lang = br.readLine();
+        br.close();
         return lang.split("_");
 
     }
 
     public void saveLanguage(String currLang) throws IOException {
-        String file ="src/main/resources/bundles/lang";
+        String userDir = System.getProperty("user.dir");
+        File file = new File(userDir, "/colorConverterLangs/bundles/lang");
+        BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(file));
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         if (Objects.equals(currLang, "null"))
             currLang = "en_US_English";
-        writer.write(currLang);
+        writer.write(currLang.getBytes());
         writer.close();
     }
 
