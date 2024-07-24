@@ -2,7 +2,7 @@
   <h1>Color picker/Color converter</h1>
 </div>
 <h2>This is a Java project using JavaFX</h2>
-<h3>With this program you can:</h3><br>
+<h3>With this program you can:</h3>
 
 - pick colors from color palette
 
@@ -10,12 +10,12 @@
   
 - convert colors (for example from rgb to hex)<br>
 <br>
-<h3>Available languages:</h3><br>
+<h3>Available languages:</h3>
 
 - English
   
 - Russian
-  
+<br>
 <h3>Some screenshots:</h3><br>
 
 ![image](https://github.com/user-attachments/assets/c403a774-088d-4354-8d8b-0ab3e144b4f7)
