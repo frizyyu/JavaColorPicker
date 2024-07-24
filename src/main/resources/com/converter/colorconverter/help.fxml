@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="605.0" prefWidth="558.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.converter.colorconverter.HelpWindowView">
+   <children>
+      <Label fx:id="help" layoutX="187.0" layoutY="20.0" prefHeight="29.0" prefWidth="185.0" style="-fx-alignment: center;" text="Help" />
+      <TextArea fx:id="helpText" editable="false" layoutX="13.0" layoutY="58.0" prefHeight="468.0" prefWidth="534.0" text="Paste image: ctrl + v\&#10;Get color from image: right-click on the image\&#10;Change language: left-click on the combo box in\&#10;                          the upper right corner\&#10;You can choose color from color palette: left\&#10;click on the color palette and move\&#10;alpha and hue strips\&#10;Also you can choose color from color fields: left click on\&#10;the color fields and type your value\&#10;\&#10;Have fun :)">
+         <font>
+            <Font size="16.0" />
+         </font></TextArea>
+      <Button fx:id="closeButton" layoutX="230.0" layoutY="544.0" mnemonicParsing="false" onAction="#closeButton" prefHeight="35.0" prefWidth="100.0" text="Close" />
+   </children>
+</AnchorPane>
